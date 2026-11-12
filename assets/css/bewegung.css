@@ -1,0 +1,68 @@
+/* Tasty Hub · Bewegung wie auf den abgenommenen Häusern (Gilles Varone, Bareiss), 11.11.2026
+   Abschnitte legen sich mit runden Ecken übereinander, Stücke schweben deckend von unten herauf,
+   Fotos zoomen heran und gleiten sacht im Rahmen, Überschriften und Lauftexte rollen zeilenweise aus dem Schlitz.
+   Nur die Startseite. Nativer Scroll, nur transform/translate/scale. */
+
+:root{--ecke:clamp(22px,2.6vw,40px);--bw-ein:cubic-bezier(.16,1,.3,1)}
+
+/* ---------- Runde Ecken: jeder Abschnitt liegt über dem vorigen ---------- */
+main>section{position:relative}
+main>:is(section,div)+section{margin-top:calc(-1 * var(--ecke));border-radius:var(--ecke) var(--ecke) 0 0}
+main>:nth-child(1){z-index:1}main>:nth-child(2){z-index:2}main>:nth-child(3){z-index:3}main>:nth-child(4){z-index:4}
+main>:nth-child(5){z-index:5}main>:nth-child(6){z-index:6}main>:nth-child(7){z-index:7}main>:nth-child(8){z-index:8}
+main>:nth-child(9){z-index:9}main>:nth-child(10){z-index:10}main>:nth-child(11){z-index:11}main>:nth-child(12){z-index:12}
+main>:nth-child(13){z-index:13}main>:nth-child(14){z-index:14}main>:nth-child(15){z-index:15}main>:nth-child(16){z-index:16}
+main>:nth-child(17){z-index:17}main>:nth-child(18){z-index:18}main>:nth-child(19){z-index:19}main>:nth-child(20){z-index:20}
+/* feine Lichtkante entlang der Ecken, damit gleich dunkle Nachbarn getrennt sind (nie ein Schatten) */
+main>:is(section,div)+section:not(.fl--papier){box-shadow:inset 0 1px 0 rgba(255,255,255,.09)}
+main>:is(section,div)+section.fl--papier{box-shadow:inset 0 1px 0 rgba(255,255,255,.7)}
+/* «hidden» würde die Zeitachse fürs Gleiten anhalten; «clip» schneidet gleich */
+main>section{overflow:clip}
+#gebaut-wie,main>section.w1{overflow:visible}
+/* Laufband: unten um die Ecke verlängert, darunter schiebt sich der nächste Abschnitt; Schrift bleibt im sichtbaren Band */
+main>.laufband{padding-bottom:calc(clamp(7px,.7vw,11px) + var(--ecke));
+  background:linear-gradient(180deg,#f8eee5 0%,var(--creme) 42%,#d8c4b2 100%) top/100% calc(100% - var(--ecke)) no-repeat,#d8c4b2}
+/* Brücke 04 endet mit dem Laptop an der Kante: Platz für die Ecke des nächsten Abschnitts */
+main>section.b8[data-baustein="04"]{padding-bottom:var(--ecke)!important}
+/* Fuss legt sich genauso über den Schluss */
+main+.fuss{position:relative;z-index:40;margin-top:calc(-1 * var(--ecke));border-radius:var(--ecke) var(--ecke) 0 0;box-shadow:inset 0 1px 0 rgba(255,255,255,.09)}
+
+/* Abschnitte, in denen dauernd etwas läuft (Bildspalten 02, Laptop 04, Ring 07, Reihen 12, Fussband): Ecken gemalt statt ausgeschnitten.
+   Rund ausschneiden kostet dort auf schwachen Geräten bei jedem Bild eine Maske; gemalt sieht es gleich aus. Farbe setzt bewegung.js. */
+main>section:is(.v14,.b8,.y1,.v12),main+.fuss{border-radius:0}
+main>section:is(.v14,.b8,.y1,.v12)::before,main>section:is(.v14,.b8,.y1,.v12)::after,main+.fuss::before,main+.fuss::after{
+  content:"";position:absolute;top:0;left:0;z-index:60;width:var(--ecke);height:var(--ecke);pointer-events:none;
+  background:radial-gradient(circle at 100% 100%,transparent calc(var(--ecke) - 1.6px),var(--ecke-linie,rgba(255,255,255,.09)) calc(var(--ecke) - 1px),var(--ecke-farbe,transparent) calc(var(--ecke) - .3px))}
+main>section:is(.v14,.b8,.y1,.v12)::after,main+.fuss::after{left:auto;right:0;
+  background:radial-gradient(circle at 0 100%,transparent calc(var(--ecke) - 1.6px),var(--ecke-linie,rgba(255,255,255,.09)) calc(var(--ecke) - 1px),var(--ecke-farbe,transparent) calc(var(--ecke) - .3px))}
+
+/* ---------- Fotos: Rahmen schneidet, Gleiten auf der Scroll-Zeitachse ---------- */
+.s11__band{overflow:clip}
+@supports (animation-timeline: view()){
+  .bw-gl{view-timeline:--bw-gleit block}
+  .bw-gl>img{animation:bw-gleit linear both;animation-timeline:--bw-gleit;animation-range:cover 0% cover 100%}
+  @keyframes bw-gleit{from{translate:0 2%}to{translate:0 -2%}}
+}
+
+/* ---------- Schlitz: Zeile für Zeile steigt der Text aus seinem Spalt ----------
+   reiner Text in Zeilen (.bw-z), Text mit Auszeichnung (em, br) Wort für Wort (.bw-w) */
+.bw-z{display:block;clip-path:inset(-.5em -1em -.22em -1em)}
+/* Wort-Schlitz ohne overflow: so bleibt die Grundlinie und damit jede Zeilenhöhe wie im reinen Text (kein Nachrutschen beim Auspacken) */
+.bw-w{display:inline-block;clip-path:inset(-.7em -.6em -.22em -.6em)}
+:is(.bw-z,.bw-w)>span{display:inline-block;transform:translateY(118%)}
+.bw-t.bw-da :is(.bw-z,.bw-w)>span{transform:none;transition:transform 1.3s var(--bw-ein);transition-delay:calc(var(--d,0s) + var(--z,0) * 95ms)}
+.bw-t.bw-sofort :is(.bw-z,.bw-w)>span{transform:none;transition:none}
+
+/* ---------- Alte Auftritte (Abschnitt «Kündigt einer»): deckend von unten statt Einblenden ---------- */
+#gebaut-wie [data-r]:not([data-r="titel"]){opacity:1;transform:translateY(clamp(64px,6.2vw,96px)) scale(.975);transform-origin:50% 100%;transition:transform 1.6s var(--bw-ein);transition-delay:calc(var(--i,0)*90ms)}
+#gebaut-wie [data-r]:not([data-r="titel"]).da{transform:none}
+
+@media (prefers-reduced-motion:reduce){
+  :is(.bw-z,.bw-w)>span{transform:none!important;transition:none!important}
+  .bw-gl>img{animation:none!important}
+}
+
+/* ---------- Mindestschrift 13 px (Prüfpunkt 17): kleine Beschriftungen, Knöpfe, Fuss ---------- */
+:is(.hinweis .kn,.eckknopf,main .kn,.h2__l,.h2__r,.b8__nr,.b6-chrom span,.b6-pn small,.b6-pn dt,.b6-bsp,.b6-k1,.b6-ue,.b6-unter,
+  .y1__l .mono,.y1__r li b,.v8__s .mono,.v8__s .mono b,.v8__fuss .bsp,.v9__eins .mono,.v9__achse span,.v9__t small,.rg .mono,.v9 .mono.bw,
+  .w1__zahlen span,.fuss__end span,.fuss__end a){font-size:13px!important}

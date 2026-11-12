@@ -93,7 +93,9 @@
         if (j < n + 1) requestAnimationFrame(stueck); else warm = true;
       })();
     }
-    B = welle(quellen, function (aus, k, da) { if (da === quellen.length) { bilderDa = true; if (rest) aufwaermen(); } }, function () { fehler = true; });
+    // erst laden, wenn der Auftakt komplett steht: die Bilder des ersten Bildschirms haben Vorrang
+    function holen() { B = welle(quellen, function (aus, k, da) { if (da === quellen.length) { bilderDa = true; if (rest) aufwaermen(); } }, function () { fehler = true; }); }
+    if (window.erstesBild || !document.documentElement.classList.contains('warte')) holen(); else document.addEventListener('erstesbild', holen, { once: true });
     Promise.all(['.b8__sg', '.b8__st', '.b8__telefon'].map(function (s) { return entpackt(w.querySelector(s)); }))
       .then(function () { rest = true; if (bilderDa) aufwaermen(); });
     // nächstgelegenes fertiges Bild (falls eines fehlt)

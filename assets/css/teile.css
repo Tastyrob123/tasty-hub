@@ -39,6 +39,11 @@
   [data-baustein="01"] .kn i{width:36px;height:36px}
   [data-baustein="01"] .h2__l,[data-baustein="01"] .h2__r{top:24px}
 }
+/* Handy: die Backoffice-Aufnahme füllt ihre Hälfte die ganze Fahrt über (vorher endete sie nach einem Drittel, darunter stand leeres Grau), 11.11.2026 */
+@media (max-width:860px){
+  [data-baustein="01"] .h2__zug{height:165%}
+  [data-baustein="01"] .h2__zug img{height:100%;object-fit:cover;object-position:50% 0}
+}
 
 /* ---------- 02-haltung ---------- */
 /* Baustein 02 · Haltung · Fassung 14 «Alle Seiten auf einen Blick» (gewählt 08.11.2026).

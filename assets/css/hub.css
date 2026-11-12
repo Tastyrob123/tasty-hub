@@ -1343,3 +1343,56 @@ dialog.kasten[open]{display:grid;grid-template-rows:auto 1fr;animation:auf .5s v
 .leiste li span{background:#000;box-shadow:0 0 0 1px rgba(235,219,206,.35)}
 .leiste li img{transform:scale(1.55);filter:grayscale(1) brightness(.85)}
 .leiste li.ok span{box-shadow:0 0 0 1px rgba(235,219,206,.7)}
+
+
+/* ---------- Fuss nach dem Agentur-Fuss, Fassung 1 «Wie die Agentur» (Robert 11.11.2026): Anker · Backoffice · Masterclass ---------- */
+
+.hf{--g:#c7b489;--g2:#d8c9ab;--l:rgba(235,219,206,.16);--e3:cubic-bezier(.19,1,.22,1);position:relative;overflow:hidden;background:#07080f;color:#fff;text-align:center}
+.hf a{color:inherit;text-decoration:none}
+.hf .lz{display:block;width:100%;height:100%;fill:currentColor;overflow:visible}
+
+/* Zeichnen wie der Anker der Agentur */
+.hf .dm{position:relative;aspect-ratio:1}
+.hf .dm>svg{position:absolute;inset:0;width:100%;height:100%;display:block;overflow:visible}
+.hf .dm-linie{fill:none;stroke:var(--g);stroke-width:7;opacity:0;transform:translateY(14px);transition:opacity 1.1s,transform 1.6s var(--e3)}
+.hf .dm-voll{fill:var(--creme);opacity:0;transition:opacity 1.6s ease 1s}
+.hf .dm.an .dm-linie,.hf .an .dm-linie{opacity:1;transform:none}
+.hf .dm.an .dm-voll,.hf .an .dm-voll{opacity:1}
+
+/* Drei Spalten: Anker · Backoffice · Masterclass */
+.hf-in{max-width:var(--max);margin:0 auto;padding:clamp(70px,7vw,120px) var(--rand) 0;display:grid;grid-template-columns:1fr 1.6fr 1fr;align-items:center;position:relative;z-index:2}
+.hf-mitte{display:flex;flex-direction:column;align-items:center;padding:0 clamp(20px,3vw,50px)}
+.hf-gross{width:clamp(170px,15vw,230px)}
+.hf-klein{margin-top:30px;font-family:var(--mono);font-size:13px;letter-spacing:.3em;text-transform:uppercase;color:var(--g)}
+.hf-name{margin-top:10px;font-family:var(--titel);font-weight:700;text-transform:uppercase;font-size:clamp(1.6rem,2.4vw,2.4rem);letter-spacing:.42em;padding-left:.42em;color:#fff}
+.hf-satz{margin:14px 0 0;color:rgba(255,255,255,.66);max-width:44ch;line-height:1.6;font-size:16px}
+.hf-sp{display:flex;flex-direction:column;align-items:center;text-align:center;padding:40px 20px;color:rgba(255,255,255,.6);opacity:0;transition:opacity 1s .9s,color .3s}
+.hf-in.an .hf-sp{opacity:1}
+.hf-l{border-right:1px solid var(--l)}.hf-r{border-left:1px solid var(--l)}
+.hf-sp:hover{color:#fff}
+.hf .hf-z{width:64px;height:64px;color:var(--creme)}
+.hf-sp b{margin-top:22px;font-family:var(--titel);font-weight:700;letter-spacing:.24em;padding-left:.24em;text-transform:uppercase;font-size:1.1rem;color:#fff}
+.hf-sp span{margin-top:8px;font-size:14px;line-height:1.5;max-width:24ch}
+.hf-pf{margin-top:18px;width:38px;height:38px;border-radius:50%;border:1px solid var(--l);display:grid;place-items:center;transition:transform .5s var(--e3),border-color .3s}
+.hf-pf svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:1.6}
+.hf-sp:hover .hf-pf{transform:rotate(45deg);border-color:currentColor}
+
+/* Wege und Schlusszeile */
+.hf-wege{position:relative;z-index:2;display:flex;flex-wrap:wrap;justify-content:center;width:max-content;max-width:calc(100% - 2 * var(--rand));margin:clamp(50px,5vw,80px) auto 0;border-top:1px solid var(--l);border-bottom:1px solid var(--l)}
+.hf-wege a{padding:18px clamp(14px,2vw,30px);font-family:var(--mono);font-size:13px;letter-spacing:.22em;text-transform:uppercase;color:rgba(255,255,255,.8);transition:color .3s}
+.hf-wege a+a{border-left:1px solid var(--l)}
+.hf-wege a:hover{color:var(--g2)}
+.hf-end{position:relative;z-index:2;max-width:var(--max);margin:clamp(60px,6vw,100px) auto 0;padding:22px var(--rand) 28px;display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px 30px;color:rgba(255,255,255,.5);font-size:13.5px;text-align:left}
+.hf-end span:last-child{display:flex;flex-wrap:wrap;gap:8px 22px}
+.hf-end a:hover{color:#fff}
+@media (max-width:860px){
+  .hf-in{grid-template-columns:1fr 1fr;row-gap:30px}
+  .hf-mitte{grid-column:1/-1;order:-1}
+  .hf-sp{padding:24px 10px}.hf-l{border-right:1px solid var(--l)}.hf-r{border-left:0}.hf-sp span{font-size:13px}
+  .hf-name{letter-spacing:.3em;padding-left:.3em}
+  .hf-wege{display:grid;grid-template-columns:1fr 1fr;width:auto;border-bottom:0}
+  .hf-wege a{padding:17px 0;letter-spacing:.16em;border-bottom:1px solid var(--l);text-align:left}
+  .hf-wege a+a{border-left:0}
+  .hf-wege a:nth-child(even){padding-left:18px;border-left:1px solid var(--l)}
+}
+@media (prefers-reduced-motion:reduce){.hf .dm-linie,.hf .dm-voll,.hf-sp{transition:none}}

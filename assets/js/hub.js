@@ -8,7 +8,8 @@
 
   /* Fotos früh holen: was in den nächsten drei Fensterhöhen liegt, wird vorgezogen und vor dem Auftritt entpackt */
   var faul = alle('img[loading="lazy"]');
-  if (faul.length && hatIO) {
+  function nachErstemBild(f) { if (window.erstesBild || !doc.classList.contains('warte')) f(); else document.addEventListener('erstesbild', f, { once: true }); }
+  if (faul.length && hatIO) nachErstemBild(function () {
     var nah = new IntersectionObserver(function (es) {
       es.forEach(function (e) {
         if (!e.isIntersecting) return;
@@ -23,7 +24,7 @@
       if (z !== im) { if (gruppen.indexOf(z) > -1) return; gruppen.push(z); }
       nah.observe(z);
     });
-  }
+  });
 
   /* Einblenden */
   var ziele = alle('[data-r]');
@@ -584,4 +585,14 @@
     });
   }, { threshold: .45 });
   [].slice.call(document.querySelectorAll('[data-loest]')).forEach(function (a) { io.observe(a); });
+})();
+
+
+/* Fuss: Zeichen zeichnen sich, sobald der Fuss zu sehen ist (wie im Agentur-Fuss), 11.11.2026 */
+(function () {
+  var t = [].slice.call(document.querySelectorAll('.hf [data-fv]'));
+  if (!t.length) return;
+  if (!('IntersectionObserver' in window) || matchMedia('(prefers-reduced-motion: reduce)').matches) { t.forEach(function (m) { m.classList.add('an'); }); return; }
+  var o = new IntersectionObserver(function (x) { x.forEach(function (y) { if (y.isIntersecting) { y.target.classList.add('an'); o.unobserve(y.target); } }); }, { threshold: .25 });
+  t.forEach(function (m) { o.observe(m); });
 })();
