@@ -8,6 +8,8 @@
 
   /* Fotos früh holen: was in den nächsten drei Fensterhöhen liegt, wird vorgezogen und vor dem Auftritt entpackt */
   var faul = alle('img[loading="lazy"]');
+  /* Bilder unterhalb des Auftakts tragen ihre Adresse in data-src: sie laden erst, wenn der Auftakt komplett steht */
+  function holeBild(im) { if (im.dataset.srcset) { im.srcset = im.dataset.srcset; im.removeAttribute('data-srcset'); } if (im.dataset.src) { im.src = im.dataset.src; im.removeAttribute('data-src'); } }
   function nachErstemBild(f) { if (window.erstesBild || !doc.classList.contains('warte')) f(); else document.addEventListener('erstesbild', f, { once: true }); }
   if (faul.length && hatIO) nachErstemBild(function () {
     var nah = new IntersectionObserver(function (es) {
@@ -15,12 +17,12 @@
         if (!e.isIntersecting) return;
         nah.unobserve(e.target);
         var ziel = e.target.tagName === 'IMG' ? [e.target] : alle('img[loading]', e.target);
-        ziel.forEach(function (im) { im.loading = 'eager'; if (im.decode) im.decode().catch(function () {}); });
+        ziel.forEach(function (im) { im.loading = 'eager'; holeBild(im); if (im.decode) im.decode().catch(function () {}); });
       });
     }, { rootMargin: '250% 40% 250% 40%' });
     var gruppen = [];
     faul.forEach(function (im) {
-      var z = im.closest('.bruch,.band,.werk__buehne,.bau,.bildband') || im;
+      var z = im.closest('.bruch,.band,.werk__buehne,.bau,.bildband') || im.closest('[data-baustein]') || im;
       if (z !== im) { if (gruppen.indexOf(z) > -1) return; gruppen.push(z); }
       nah.observe(z);
     });
@@ -38,7 +40,7 @@
     offen.forEach(function (im) {
       var entpackt = function () { (im.decode ? im.decode() : Promise.resolve()).then(eins, eins); };
       if (im.complete && im.naturalWidth) return entpackt();
-      im.loading = 'eager';
+      im.loading = 'eager'; holeBild(im);
       im.addEventListener('load', entpackt, { once: true });
       im.addEventListener('error', eins, { once: true });
     });
