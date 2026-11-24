@@ -146,7 +146,7 @@
       if (fehler) { clearInterval(uhr); aufgeben(); return; }
       if (!sichtbar()) return;
       if (B && warm) { clearInterval(uhr); los(); }
-      else if ((gewartet += 100) > 9000) { clearInterval(uhr); aufgeben(); }
+      else if ((gewartet += 100) > 1200) { clearInterval(uhr); aufgeben(); }   // Robert 24.11.2026: nie leere Fläche; nach 1,2 s steht der Laptop offen als Standbild
     }, 100);
   });
 })();
